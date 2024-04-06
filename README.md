@@ -24,7 +24,7 @@
 
 游戏结束:
 
-![本地图片](\gamePhotos\end.png)
+![本地图片](gamePhotos/end.png)
 
 ## level文件夹
 level文件夹存储着我设计的全部关卡的信息。
