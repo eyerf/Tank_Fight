@@ -109,16 +109,14 @@ public class GameMap {
             //解析最后一个double值
             int dis = (int) (Double.parseDouble(split[i]) * DIS);
             switch (name) {
-                case "addRow":
+                case "addRow" -> {
                     System.out.println(MAP_Y);
                     addRow(MAP_X + arr[0] * DIS, MAP_Y + arr[1] * DIS, MAP_X + MAP_WIDTH - arr[2] * DIS, arr[3], dis);
-                    break;
-                case "addCol":
-                    addCol(MAP_X + arr[0] * DIS, MAP_Y + arr[1] * DIS, MAP_Y + MAP_HEIGHT - arr[2] * DIS, arr[3], dis);
-                    break;
-                case "addRect":
-                    addRect(MAP_X + arr[0] * DIS, MAP_Y + arr[1] * DIS, MAP_X + MAP_WIDTH - arr[2] * DIS, MAP_Y + MAP_HEIGHT - arr[3] * DIS, arr[4], dis);
-                    break;
+                }
+                case "addCol" ->
+                        addCol(MAP_X + arr[0] * DIS, MAP_Y + arr[1] * DIS, MAP_Y + MAP_HEIGHT - arr[2] * DIS, arr[3], dis);
+                case "addRect" ->
+                        addRect(MAP_X + arr[0] * DIS, MAP_Y + arr[1] * DIS, MAP_X + MAP_WIDTH - arr[2] * DIS, MAP_Y + MAP_HEIGHT - arr[3] * DIS, arr[4], dis);
             }
         }
     }

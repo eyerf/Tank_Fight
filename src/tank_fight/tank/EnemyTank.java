@@ -17,8 +17,8 @@ public class EnemyTank extends Tank {
     public static final int TYPE_WHITE = 1;
     private int type = TYPE_GREEN;
     //敌人坦克的图片数组
-    private static Image[] greenImg;
-    private static Image[] whiteImg;
+    private static final Image[] greenImg;
+    private static final Image[] whiteImg;
     //记录5秒开始的时间
     private long aiTime;
 

@@ -64,11 +64,81 @@ GameFrame的静态变量:
 GameFrame的构造方法:由启动类GameMain进行调用，初始化游戏，初始化游戏的开始窗口界面，初始化对于游戏开始界面窗口的监听，并启动一个线程开始刷新窗口
 
 GameFrame的成员方法:
+- static void startGame(int level): 游戏开始的核心方法，首先清空敌人的容器，然后初始化地图，播放开始游戏的音乐，改变游戏状态为Constant.STATE_RUN，创建自己的坦克对象，最后创建一个单独的线程，用于去定时生产敌人的坦克
 - void initGame():对游戏进行初始化,将游戏状态设置为STATE_MENUE（菜单界面）
 - void initFrame(): 对游戏属性进行初始化，设置标题，设置窗口大小，设置窗口的左上角的坐标，设置窗口大小不可改变，设置窗口可见
 - void update(Graphics g1): 是Frame类继承下来的方法,该方法负责了所有的绘制的内容，所有需要在屏幕中显示的内容，都要在该方法中调用。该方法不能主动调用。必须通过调用repaint()去回调该方法
 - void drawLost(Graphics g, String str): 绘制游戏结束的方法
-- drawWin(Graphics g):绘制游戏胜利的界面
-- drawRun(Graphics g): 游戏运行状态的绘制内容,包括黑色的背景，地图的碰撞层，地图的遮挡层，同时调用子弹和坦克的碰撞的方法，子弹和所有的地图块的碰撞方法进行碰撞检测
-- drawEnemies(Graphics g):绘制所有的敌人的坦克, 但是如果敌人已经死亡，就需要从容器中移除它
-- 
+- void drawWin(Graphics g):绘制游戏胜利的界面
+- void drawRun(Graphics g): 游戏运行状态的绘制内容,包括黑色的背景，地图的碰撞层，地图的遮挡层，同时调用子弹和坦克的碰撞的方法，子弹和所有的地图块的碰撞方法进行碰撞检测
+- void drawEnemies(Graphics g):绘制所有的敌人的坦克, 但是如果敌人已经死亡，就需要从容器中移除它
+- void drawMenu(Graphics g)：绘制菜单状态下的内容，包括黑色的背景，菜单中的选项（选中菜单项的颜色设置为红色），其他的为白色
+- void initEventListener()：初始化窗口的事件监听,添加按键监听事件,获取被被按下键的键值(或者松开的键值)，不同的游戏状态，需要给出不同的处理方法
+- void keyPressedEventWin(int keyCode):游戏通关的按键处理
+- void keyReleasedEventRun(int keyCode):按键松开的时候，游戏中的处理方法(将坦克状态设置为站立)
+- void keyPressedEventLost(int keyCode): 游戏结束的按键处理,需要退出游戏，或者重回菜单，同时调用resetGame()重置游戏状态
+- void resetGame()：重置游戏状态，将所有属性初始化到最初的状态，先让自己的坦克的子弹还回对象池在销毁自己的坦克，清空所有敌人与敌人子弹，清空地图资源
+- void keyPressedEventRun(int keyCode):游戏运行中的按键的处理方法,改变坦克的状态，或者让坦克开火
+- void keyPressedEventMenu(int keyCode): 菜单状态下的按键的处理,上下左右移动菜单选项，按下回车键，执行选项对应的功能
+- void run(): GameFrame继承了Thread类，需要重写run方法，每隔一定的时间间隔调用repaint()方法来刷新窗口
+- void bulletCollideTank()：子弹和坦克碰撞的检测（敌人的坦克的子弹和我的坦克的碰撞，我的坦克的子弹和所有的敌人的碰撞）
+- void bulletAndTankCollideMapTile()： 所有的子弹和坦克和地图块的碰撞检测，同时实现清理被销毁的地图块的功能
+- drawExplodes(Graphics g)： 所有的坦克上的爆炸效果的绘制
+- drawCross(Graphics g)： 绘制过关动画，这里实现了一个百叶窗的效果来用于绘制过关的动画。（百叶窗先关闭，再打开）。
+
+**GameInfo**:游戏相关的信息的类，这里主要是从配置文件中读取到配置的关卡数量，并提供方法给其他类获取
+
+**LevelInfo**:用来管理当前关卡信息的一个单例类
+单例设计模式：如果一个类只需要该类具有唯一的实例，那么可以使用单例设计模式来设计该类
+
+LevelInfo的静态变量:
+- private static LevelInfo instance： 定义静态的本类类型的变量，来指向唯一的实例
+
+LevelInfo的成员变量：
+- private int level: 关卡的编号
+- private int enemyCount: 关卡的敌人的数量
+- private int crossTime = -1 : 通关的要求的时长, -1 意味着不限时
+- private int[] enemyType: 敌人的类型
+- private int levelType: 游戏的难度, 一个大于等于1的值
+
+LevelInfo的成员方法：
+- public static LevelInfo getInstance(): 该静态方法返回懒汉模式的单例，我们在第一次使用该实例的时候创建唯一的实例，所有的访问该类的唯一实例都是通过该方法（该方法具有安全隐患，多线程的情况下可能会创建多个实例）
+- public int getRandomEnemyType()：获得敌人类型数组中的随机的一个元素，获得一个随机的敌人类型
+
+### tank_fight.map
+意如其名，map包中存放的都是跟游戏地图和砖块相关的类，包括了游戏的地图，游戏会用到的砖块，以及我们玩家的主基地（~~老窝~~）
+
+**GameMap**:游戏地图类,通过该类实现游戏地图的加载，地图上砖块的管理和游戏地图的初始化。值得一提的是，该类通过读取配置文件中的关卡信息，通过java反射来生成关卡对应的砖块，进而生成关卡。
+
+**MapTile**:地图元素块类。通过该类来管理游戏中会出现的全部的地图元素块（砖块，实心块，绿草块等等），值得一提的是该类实现了**isCollideBullet**方法，判断地图块是否有和子弹发生碰撞，
+若发生了碰撞，就销毁子弹（visible=false）同时根据砖块的种类判断是否要销毁砖块
+
+**MapTile**:：玩家的大本营，因为大本营是固定的，在静态代码块中就初始化并绘制了核心块和核心周围一圈的砖块。
+
+### tank_fight.tank
+
+**EnemyTank**:敌人坦克类，继承了Tank类，加载了敌人坦克的图片和其他的一些配置信息，值得一提的是该类提供的两个方法：
+
+- public static Tank creatEnemy()：该方法用于创建一个敌人的坦克，需要根据游戏的难度，设置敌人的血量，同时通关关卡信息中的敌人类型，来设置当前出生的敌人的类型
+- private void ai()：该方法模拟了敌人的简单AI，每间隔5秒随机给敌人设置一个状态，同时根据难度，设置随机开火的概率
+
+**MyTank**:玩家坦克类，主要加载了玩家坦克的图片，和配置信息
+
+**Tank**:坦克类。是敌人坦克和玩家坦克的父类，提供实现了坦克所包括的全部的静态，成员变量与方法。
+
+坦克类同时保存着坦克发射的子弹的容器，已经当前坦克上的所有的爆炸效果。
+
+实现的方法中，值得一提的包括了：
+- private void move(): 坦克移动的功能
+- public void fire(): 坦克开火的功能，创建了一个子弹对象（从对象池中获取子弹对象），子弹对象的属性信息通过坦克的信息获得，然后将创建的子弹添加到坦克管理的容器中
+- public void collideBullets(List<Bullet> bullets)： 坦克和子弹碰撞的方法，遍历所有的子弹，依次和当前的坦克进行碰撞的检测，子弹和坦克碰上了，子弹消失，坦克受到伤害并添加爆炸效果
+- private void die()： 坦克死亡需要处理的内容。敌人坦克被消灭了归还对象池，判断本关是否结束了，判断游戏是否通关，判断游戏是否通关。如果是己方坦克被消灭则游戏结束。
+- public void bulletsCollideMapTiles(List<MapTile> tiles)： 坦克的子弹和地图所有块的碰撞
+- private void delaySecondsToOver(int millisSecond)： 开启一个新的线程，延迟若干毫秒后切换到游戏结束
+- public boolean isCollideTile(List<MapTile> tiles): 一个地图块和当前的坦克碰撞的方法, 从tile中提取8个点，来判断8个点中是否有任何一个点和当前的坦克发生了碰撞, 点的顺序从左上角开始，顺时针遍历, 如果是块不可见，或者是遮挡块，就不进行碰撞的检测, 如果碰上了就直接返回，否则就继续判断下一个点
+
+同时坦克类还管理着一个内部类：BloodBar, 用于表示坦克的血条，并绘制出来
+
+
+
+### tank_fight.util

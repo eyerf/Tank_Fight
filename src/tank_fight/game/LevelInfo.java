@@ -4,7 +4,6 @@ import tank_fight.util.MyUtil;
 
 /**
  * 用来管理当前关卡信息的：单例类
- * 用来管理当前关卡的信息
  * 单例设计模式：如果一个类只需要该类具有唯一的实例，那么可以使用单例设计模式来设计该类
  */
 public class LevelInfo {

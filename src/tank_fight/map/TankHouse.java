@@ -14,7 +14,7 @@ public class TankHouse {
     public static final int HOUSE_X = (Constant.FRAME_WIDTH - 3 * MapTile.tileW) / 2 + 2;
     public static final int HOUSE_Y = Constant.FRAME_HEIGHT - 2 * MapTile.tileH;
 
-    private List<MapTile> tiles = new ArrayList<MapTile>();
+    private final List<MapTile> tiles = new ArrayList<MapTile>();
 
     public TankHouse() {
         tiles.add(new MapTile(HOUSE_X, HOUSE_Y));
@@ -24,7 +24,7 @@ public class TankHouse {
         tiles.add(new MapTile(HOUSE_X + MapTile.tileW * 2, HOUSE_Y + MapTile.tileH));
         //有文字的块
         tiles.add(new MapTile(HOUSE_X + MapTile.tileW, HOUSE_Y + MapTile.tileH));
-        //设置老曹地图块的类型
+        //设置老窝地图块的类型
         tiles.get(tiles.size() - 1).setType(MapTile.TYPE_HOUSE);
     }
 

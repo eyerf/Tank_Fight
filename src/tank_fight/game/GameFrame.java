@@ -186,10 +186,9 @@ public class GameFrame extends Frame implements Runnable {
      * @param g 画笔对象，系统提供
      */
     private void drawMenu(Graphics g) {
-        //绘制黑色的背景
+        //制绘黑色的背景
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, Constant.FRAME_WIDTH, Constant.FRAME_HEIGHT);
-
         final int STR_WIDTH = 76;
         int x = Constant.FRAME_WIDTH - STR_WIDTH >> 1;
         int y = Constant.FRAME_HEIGHT / 3;
@@ -216,7 +215,6 @@ public class GameFrame extends Frame implements Runnable {
                 System.exit(0);
             }
         });
-
         //添加按键监听事件
         addKeyListener(new KeyAdapter() {
             //按键被按下的时候被回调的方法
@@ -226,26 +224,14 @@ public class GameFrame extends Frame implements Runnable {
                 int keyCode = e.getKeyCode();
                 //不同的游戏状态，给出不同的处理方法
                 switch (gameState) {
-                    case Constant.STATE_MENUE:
-                        keyPressedEventMenu(keyCode);
-                        break;
-                    case Constant.STATE_HELP:
-                        keyPressedEventHelp(keyCode);
-                        break;
-                    case Constant.STATE_ABOUT:
-                        keyPressedEventAbout(keyCode);
-                        break;
-                    case Constant.STATE_RUN:
-                        keyPressedEventRun(keyCode);
-                        break;
-                    case Constant.STATE_LOST:
-                        keyPressedEventLost(keyCode);
-                        break;
-                    case Constant.STATE_WIN:
-                        keyPressedEventWin(keyCode);
+                    case Constant.STATE_MENUE -> keyPressedEventMenu(keyCode);
+                    case Constant.STATE_HELP -> keyPressedEventHelp(keyCode);
+                    case Constant.STATE_ABOUT -> keyPressedEventAbout(keyCode);
+                    case Constant.STATE_RUN -> keyPressedEventRun(keyCode);
+                    case Constant.STATE_LOST -> keyPressedEventLost(keyCode);
+                    case Constant.STATE_WIN -> keyPressedEventWin(keyCode);
                 }
             }
-
             //按键松开的时候回调的内容
             @Override
             public void keyReleased(KeyEvent e) {
@@ -269,16 +255,8 @@ public class GameFrame extends Frame implements Runnable {
     //按键松开的时候，游戏中的处理方法
     protected void keyReleasedEventRun(int keyCode) {
         switch (keyCode) {
-            case KeyEvent.VK_UP:
-            case KeyEvent.VK_W:
-            case KeyEvent.VK_DOWN:
-            case KeyEvent.VK_S:
-            case KeyEvent.VK_LEFT:
-            case KeyEvent.VK_A:
-            case KeyEvent.VK_RIGHT:
-            case KeyEvent.VK_D:
-                myTank.setState(Tank.STATE_STAND);
-                break;
+            case KeyEvent.VK_UP, KeyEvent.VK_W, KeyEvent.VK_DOWN, KeyEvent.VK_S, KeyEvent.VK_LEFT, KeyEvent.VK_A, KeyEvent.VK_RIGHT, KeyEvent.VK_D ->
+                    myTank.setState(Tank.STATE_STAND);
         }
     }
 
@@ -315,31 +293,24 @@ public class GameFrame extends Frame implements Runnable {
     //游戏运行中的按键的处理方法
     private void keyPressedEventRun(int keyCode) {
         switch (keyCode) {
-            case KeyEvent.VK_UP:
-            case KeyEvent.VK_W:
+            case KeyEvent.VK_UP, KeyEvent.VK_W -> {
                 myTank.setDir(Tank.DIR_UP);
                 myTank.setState(Tank.STATE_MOVE);
-                break;
-            case KeyEvent.VK_DOWN:
-            case KeyEvent.VK_S:
+            }
+            case KeyEvent.VK_DOWN, KeyEvent.VK_S -> {
                 myTank.setDir(Tank.DIR_DOWN);
                 myTank.setState(Tank.STATE_MOVE);
-                break;
-            case KeyEvent.VK_LEFT:
-            case KeyEvent.VK_A:
+            }
+            case KeyEvent.VK_LEFT, KeyEvent.VK_A -> {
                 myTank.setDir(Tank.DIR_LEFT);
                 myTank.setState(Tank.STATE_MOVE);
-                break;
-            case KeyEvent.VK_RIGHT:
-            case KeyEvent.VK_D:
+            }
+            case KeyEvent.VK_RIGHT, KeyEvent.VK_D -> {
                 myTank.setDir(Tank.DIR_RIGHT);
                 myTank.setState(Tank.STATE_MOVE);
-                break;
-            case KeyEvent.VK_SPACE:
-                myTank.fire();
-                break;
+            }
+            case KeyEvent.VK_SPACE -> myTank.fire();
         }
-
     }
 
     private void keyPressedEventAbout(int keyCode) {
@@ -353,41 +324,32 @@ public class GameFrame extends Frame implements Runnable {
     //菜单状态下的按键的处理
     private void keyPressedEventMenu(int keyCode) {
         switch (keyCode) {
-            case KeyEvent.VK_UP:
-            case KeyEvent.VK_W:
+            case KeyEvent.VK_UP, KeyEvent.VK_W -> {
                 menuIndex--;
                 if (menuIndex < 0) {
                     menuIndex = Constant.MENUS.length - 1;
                 }
-                break;
-            case KeyEvent.VK_DOWN:
-            case KeyEvent.VK_S:
+            }
+            case KeyEvent.VK_DOWN, KeyEvent.VK_S -> {
                 menuIndex++;
                 if (menuIndex > Constant.MENUS.length - 1) {
                     menuIndex = 0;
                 }
-                break;
-            case KeyEvent.VK_ENTER:
+            }
+            case KeyEvent.VK_ENTER -> {
                 switch (menuIndex) {
                     //TODO
-                    case 0:
-                        startGame(1);
-                        break;
-                    case 1:
-                        //继续游戏，进入关卡选择界面
-                        break;
-                    case 2:
-                        setGameState(Constant.STATE_HELP);
-                        break;
-                    case 3:
-                        setGameState(Constant.STATE_ABOUT);
-                        break;
-                    case 4:
+                    case 0 -> startGame(1);
+                    case 1 -> {
+                    }
+                    //继续游戏，进入关卡选择界面
+                    case 2 -> setGameState(Constant.STATE_HELP);
+                    case 3 -> setGameState(Constant.STATE_ABOUT);
+                    case 4 -> {
                         System.exit(0);
-                        ;
-                        break;
+                    }
                 }
-                break;
+            }
         }
     }
 
@@ -405,16 +367,13 @@ public class GameFrame extends Frame implements Runnable {
         bornEnemyCount = 0;
         killEnemyCount = 0;
         gameState = Constant.STATE_RUN;
-
-        //创建坦克对象，敌人的坦克对象
+        //创建坦克对象
         myTank = new MyTank(Constant.FRAME_WIDTH / 3, Constant.FRAME_HEIGHT - Tank.RADIUS, Tank.DIR_UP);
-
-
         //使用一个单独的线程用于控制生产敌人的坦克
         new Thread() {
             @Override
             public void run() {
-                while (true) {
+                do {
                     if (LevelInfo.getInstance().getEnemyCount() > bornEnemyCount && enemies.size() < Constant.ENEMY_MAX_COUNT) {
                         Tank enemy = EnemyTank.creatEnemy();
                         enemies.add(enemy);
@@ -426,10 +385,7 @@ public class GameFrame extends Frame implements Runnable {
                         e.printStackTrace();
                     }
                     //只有在游戏RUN状态下才创建敌人
-                    if (gameState != Constant.STATE_RUN) {
-                        break;
-                    }
-                }
+                } while (gameState == Constant.STATE_RUN);
             }
         }.start();
     }
@@ -451,25 +407,20 @@ public class GameFrame extends Frame implements Runnable {
     //我的坦克的子弹和所有的敌人的碰撞
     private void bulletCollideTank() {
         //我的坦克的子弹和所有的敌人的碰撞
-        for (int i = 0; i < enemies.size(); i++) {
-            Tank enemy = enemies.get(i);
+        for (Tank enemy : enemies) {
             enemy.collideBullets(myTank.getBullets());
         }
-
         //敌人的坦克的子弹和我的坦克的碰撞
-        for (int i = 0; i < enemies.size(); i++) {
-            Tank enemy = enemies.get(i);
+        for (Tank enemy : enemies) {
             myTank.collideBullets(enemy.getBullets());
         }
     }
 
-    //所有的子弹和地图块的碰撞
+    //所有的子弹和坦克和地图块的碰撞
     private void bulletAndTankCollideMapTile() {
         //坦克的子弹和地图块的碰撞
         myTank.bulletsCollideMapTiles(gameMap.getTiles());
-
-        for (int i = 0; i < enemies.size(); i++) {
-            Tank enemy = enemies.get(i);
+        for (Tank enemy : enemies) {
             enemy.bulletsCollideMapTiles(gameMap.getTiles());
         }
         //坦克和地图的碰撞
@@ -477,8 +428,7 @@ public class GameFrame extends Frame implements Runnable {
             myTank.back();
         }
         //敌人的坦克和地图的碰撞
-        for (int i = 0; i < enemies.size(); i++) {
-            Tank enemy = enemies.get(i);
+        for (Tank enemy : enemies) {
             if (enemy.isCollideTile(gameMap.getTiles())) {
                 enemy.back();
             }
@@ -489,8 +439,7 @@ public class GameFrame extends Frame implements Runnable {
 
     //所有的坦克上的爆炸效果
     private void drawExplodes(Graphics g) {
-        for (int i = 0; i < enemies.size(); i++) {
-            Tank enemy = enemies.get(i);
+        for (Tank enemy : enemies) {
             enemy.drawExplodes(g);
         }
         myTank.drawExplodes(g);
@@ -554,7 +503,6 @@ public class GameFrame extends Frame implements Runnable {
         gameMap.drawBk(g);
         myTank.draw(g);
         gameMap.drawCover(g);
-
         g.setColor(Color.black);
         //关闭百叶窗的效果
         if (!isOpen) {

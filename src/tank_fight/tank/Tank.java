@@ -45,14 +45,14 @@ public abstract class Tank {
     private Color color;
     private boolean isEnemy = false;
 
-    private BloodBar bar = new BloodBar();
+    private final BloodBar bar = new BloodBar();
 
 
     //子弹容器
-    private List<Bullet> bullets = new ArrayList<Bullet>();
+    private final List<Bullet> bullets = new ArrayList<Bullet>();
 
     //使用容器来保存当前坦克上的所有的爆炸效果
-    private List<Explode> explodes = new ArrayList<Explode>();
+    private final List<Explode> explodes = new ArrayList<Explode>();
 
     //用于构造坦克
     public Tank(int x, int y, int dir) {
@@ -139,13 +139,11 @@ public abstract class Tank {
     //坦克的逻辑处理
     private void logic() {
         switch (state) {
-            case STATE_STAND:
-                break;
-            case STATE_MOVE:
-                move();
-                break;
-            case STATE_DIE:
-                break;
+            case STATE_STAND -> {
+            }
+            case STATE_MOVE -> move();
+            case STATE_DIE -> {
+            }
         }
     }
 
@@ -156,30 +154,30 @@ public abstract class Tank {
         oldX = x;
         oldY = y;
         switch (dir) {
-            case DIR_UP:
+            case DIR_UP -> {
                 y = y - speed;
                 if (y <= RADIUS + GameFrame.titleBarH) {
                     y = RADIUS + GameFrame.titleBarH;
                 }
-                break;
-            case DIR_DOWN:
+            }
+            case DIR_DOWN -> {
                 y = y + speed;
                 if (y >= Constant.FRAME_HEIGHT - RADIUS) {
                     y = Constant.FRAME_HEIGHT - RADIUS;
                 }
-                break;
-            case DIR_LEFT:
+            }
+            case DIR_LEFT -> {
                 x = x - speed;
                 if (x <= RADIUS) {
                     x = RADIUS;
                 }
-                break;
-            case DIR_RIGHT:
+            }
+            case DIR_RIGHT -> {
                 x = x + speed;
                 if (x >= Constant.FRAME_WIDTH - RADIUS) {
                     x = Constant.FRAME_WIDTH - RADIUS;
                 }
-                break;
+            }
         }
     }
 
@@ -294,7 +292,6 @@ public abstract class Tank {
                     bulletX += RADIUS;
                     break;
             }
-
             //从对象池中获取子弹对象
             Bullet bullet = BulletPool.get();
             //设置子弹的属性
@@ -305,7 +302,6 @@ public abstract class Tank {
             bullet.setColor(color);
             bullet.setVisible(true);
             bullets.add(bullet);
-
             //发射子弹之后，记录本次发射的时间
             fireTime = System.currentTimeMillis();
         }
@@ -451,21 +447,21 @@ public abstract class Tank {
     public void bulletsCollideMapTiles(List<MapTile> tiles) {
         //for each (增强的for循环) 遍历容器中的元素，在遍历的过程中，只能使用迭代器的删除方式删除元素
         //所有的for each都要切换为基本的for循环
-        for (int i = 0; i < tiles.size(); i++) {
-            if (tiles.get(i).isCollideBullet(bullets)) {
+        for (MapTile tile : tiles) {
+            if (tile.isCollideBullet(bullets)) {
                 //添加爆炸效果
                 MusicUtil.playBomb();
-                addExplode(tiles.get(i).getX() + MapTile.radius, tiles.get(i).getY() + MapTile.radius);
+                addExplode(tile.getX() + MapTile.radius, tile.getY() + MapTile.radius);
                 //地图水泥块没有击毁的处理
-                if (tiles.get(i).getType() == MapTile.TYPE_HARD) {
+                if (tile.getType() == MapTile.TYPE_HARD) {
                     continue;
                 }
                 //设置地图块销毁
-                tiles.get(i).setVisible(false);
+                tile.setVisible(false);
                 //归还对象池
-                MapTilePool.theReturn(tiles.get(i));
+                MapTilePool.theReturn(tile);
                 //当老巢被击毁之后，一秒钟，切换到游戏结束的画面
-                if (tiles.get(i).isHouse()) {
+                if (tile.isHouse()) {
                     delaySecondsToOver(3000);
                 }
             }

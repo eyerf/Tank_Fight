@@ -10,7 +10,7 @@ import tank_fight.util.MyUtil;
  */
 public class MyTank extends Tank {
     //坦克的图片数组
-    private static Image[] tankImg;
+    private static final Image[] tankImg;
 
     //静态代码块中对它进行初始化
     static {
