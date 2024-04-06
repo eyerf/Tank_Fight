@@ -15,7 +15,7 @@ public class MyUtil {
 	 * @param max 区间最大值，不包含
 	 * @return 随机数
 	 */
-	public static final int getRandomNumber(int min, int max) {
+	public static int getRandomNumber(int min, int max) {
 		return (int)(Math.random() * (max - min) + min);
 	}
 	
