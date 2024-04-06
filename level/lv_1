@@ -1,0 +1,24 @@
+#第一关的关卡信息,关卡信息中不要包含空格
+#敌人数量
+enemyCount=2
+#敌人坦克类型多个类型使用[逗号]分隔
+enemyType=1
+#地图生成的方式通过调用哪个方法生成
+method=addRow
+#该方法调用几次
+invokeCount=5
+#关卡难度
+levelType=1
+#方法调用提供的参数
+#startX, startY, endX, type, DIS
+#0,从地图的左上角开始,0代表边界,大于零的值都是地图元素块的宽度的倍数
+#TYPE_NORMAL = 0;
+#TYPE_HOUSE = 1;
+#TYPE_COVER = 2;
+#TYPE_HARD = 3;
+param1=0,0,0,0,0
+param2=0,2,0,2,1
+param3=5,4,5,3,0
+param4=0,6,0,0,2
+param5=0,8,0,2,0
+
