@@ -14,7 +14,7 @@ public class EnemyTanksPool {
     public static final int POOL_MAX_SIZE = 20;
 
     //用于保存所有的坦克的容器
-    private static List<Tank> pool = new ArrayList<Tank>();
+    private static final List<Tank> pool = new ArrayList<Tank>();
 
     //在类加载的时候创建20个坦克对象添加到容器中
     static {
@@ -29,7 +29,7 @@ public class EnemyTanksPool {
     public static Tank get() {
         Tank tank = null;
         //池塘被掏空了
-        if (pool.size() == 0) {
+        if (pool.isEmpty()) {
             tank = new EnemyTank();
         } else {
             //池塘中还有对象，拿走第一个位置的坦克对象

@@ -13,7 +13,7 @@ public class ExplodesPool {
     public static final int POOL_MAX_SIZE = 20;
 
     //用于保存所有的爆炸效果的容器
-    private static List<Explode> pool = new ArrayList<Explode>();
+    private static final List<Explode> pool = new ArrayList<Explode>();
 
     //
     static {
@@ -28,7 +28,7 @@ public class ExplodesPool {
     public static Explode get() {
         Explode explode = null;
         //池塘被掏空了
-        if (pool.size() == 0) {
+        if (pool.isEmpty()) {
             explode = new Explode();
         } else {
             //池塘中还有对象，拿走第一个位置的子弹对象
