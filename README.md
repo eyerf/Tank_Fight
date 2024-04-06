@@ -12,15 +12,15 @@
 ## 游戏效果展示
 游戏界面菜单:
 
-![本地图片](.\gamePhotos\start.png)
+![本地图片](gamePhotos/start.png)
 
 关卡1:
 
-![本地图片](.\gamePhotos\level_1.png)
+![本地图片](gamePhotos/level_1.png)
 
 关卡2:
 
-![本地图片](.\gamePhotos\level_2.png)
+![本地图片](gamePhotos/level_2.png)
 
 游戏结束:
 
