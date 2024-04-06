@@ -23,7 +23,7 @@ public class GameFrame extends Frame implements Runnable {
     //第一次使用的时候加载，而不是类加载的时候加载
     private Image overImg = null;
     //定义一张和屏幕大小一致的图片
-    private BufferedImage bufImg = new BufferedImage(Constant.FRAME_WIDTH, Constant.FRAME_HEIGHT, BufferedImage.TYPE_4BYTE_ABGR);
+    private final BufferedImage bufImg = new BufferedImage(Constant.FRAME_WIDTH, Constant.FRAME_HEIGHT, BufferedImage.TYPE_4BYTE_ABGR);
     //游戏状态
     private static int gameState;
 
@@ -37,7 +37,7 @@ public class GameFrame extends Frame implements Runnable {
     private static Tank myTank;
 
     //敌人的坦克容器
-    private static List<Tank> enemies = new ArrayList<Tank>();
+    private static final List<Tank> enemies = new ArrayList<Tank>();
 
     //统计本关卡一共出现的敌人数量
     private static int bornEnemyCount;
@@ -46,7 +46,10 @@ public class GameFrame extends Frame implements Runnable {
 
     //定义地图相关的内容
     private static GameMap gameMap = new GameMap();
-    ;
+
+    private Image helpImg;
+
+    private Image aboutImg;
 
     /*
      * 对窗口进行初始化
@@ -81,17 +84,13 @@ public class GameFrame extends Frame implements Runnable {
         setResizable(false);
         //设置窗口可见
         setVisible(true);
-
-        //求标题栏的高度
-        titleBarH = getInsets().top;
-        System.out.println(titleBarH);
     }
 
     /*
      * 是Frame类的方法，继承下来的方法，
      * 该方法负责了所有的绘制的内容，所有需要在屏幕中显示的
      * 内容，都要在该方法中调用。该方法不能主动调用。必须通过调用
-     * repaint();去回调该方法
+     * repaint()去回调该方法
      * @param g1 画笔对象，系统提供,系统进行初始化
      */
     public void update(Graphics g1) {
@@ -100,32 +99,18 @@ public class GameFrame extends Frame implements Runnable {
         //使用图片画笔将所有的内容绘制到图片上
         g.setFont(Constant.GAME_FONT);
         switch (gameState) {
-            case Constant.STATE_MENUE:
-                drawMenu(g);
-                break;
-            case Constant.STATE_HELP:
-                drawHelp(g);
-                break;
-            case Constant.STATE_ABOUT:
-                drawAbout(g);
-                break;
-            case Constant.STATE_RUN:
-                drawRun(g);
-                break;
-            case Constant.STATE_LOST:
-                drawLost(g, "过关失败");
-                break;
-            case Constant.STATE_WIN:
-                drawWin(g);
-                break;
-            case Constant.STATE_CROSS:
-                drawCross(g);
-                break;
+            case Constant.STATE_MENUE -> drawMenu(g);
+            case Constant.STATE_HELP -> drawHelp(g);
+            case Constant.STATE_ABOUT -> drawAbout(g);
+            case Constant.STATE_RUN -> drawRun(g);
+            case Constant.STATE_LOST -> drawLost(g, "过关失败");
+            case Constant.STATE_WIN -> drawWin(g);
+            case Constant.STATE_CROSS -> drawCross(g);
         }
-
         //使用系统画笔，将图片绘制到frame上来
         g1.drawImage(bufImg, 0, 0, null);
     }
+
 
     /*
      * 绘制游戏结束的方法
@@ -135,17 +120,13 @@ public class GameFrame extends Frame implements Runnable {
         if (overImg == null) {
             overImg = MyUtil.creatImage("res/TankEnd.jpg");
         }
-
         int imgW = overImg.getWidth(null);
         int imgH = overImg.getHeight(null);
-
         g.drawImage(overImg, (Constant.FRAME_WIDTH - imgW) >> 1, (Constant.FRAME_HEIGHT - imgH) >> 1, null);
-
         //添加按键的提示信息
         g.setColor(Color.white);
         g.drawString(Constant.OVER_STR0, 10, Constant.FRAME_HEIGHT - 30);
         g.drawString(Constant.OVER_STR1, Constant.FRAME_WIDTH - 200, Constant.FRAME_HEIGHT - 30);
-
         g.setColor(Color.white);
         g.drawString(str, Constant.FRAME_WIDTH / 2 - 30, 50);
     }
@@ -164,22 +145,15 @@ public class GameFrame extends Frame implements Runnable {
         //绘制黑色的背景
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, Constant.FRAME_WIDTH, Constant.FRAME_HEIGHT);
-
         //绘制地图的碰撞层
         gameMap.drawBk(g);
-
         drawEnemies(g);
-
         myTank.draw(g);
-
         drawExplodes(g);
-
         //绘制地图的遮挡层
         gameMap.drawCover(g);
-
         //子弹和坦克的碰撞的方法
         bulletCollideTank();
-
         //子弹和所有的地图块的碰撞
         bulletAndTankCollideMapTile();
     }
@@ -196,9 +170,6 @@ public class GameFrame extends Frame implements Runnable {
             enemy.draw(g);
         }
     }
-
-    private Image helpImg;
-    private Image aboutImg;
 
     private void drawAbout(Graphics g) {
         g.setColor(Color.black);
@@ -535,6 +506,12 @@ public class GameFrame extends Frame implements Runnable {
         return gameState;
     }
 
+    //开始过关动画
+    public static int flashTime;
+    public static final int RECT_WIDTH = 40;
+    public static final int RECT_COUNT = Constant.FRAME_WIDTH / RECT_WIDTH + 1;
+    public static boolean isOpen = false;
+
     /**
      * 游戏是否是最后一关
      */
@@ -565,12 +542,6 @@ public class GameFrame extends Frame implements Runnable {
     public static void nextLevel() {
         startGame(LevelInfo.getInstance().getLevel() + 1);
     }
-
-    //开始过关动画
-    public static int flashTime;
-    public static final int RECT_WIDTH = 40;
-    public static final int RECT_COUNT = Constant.FRAME_WIDTH / RECT_WIDTH + 1;
-    public static boolean isOpen = false;
 
     public static void startCrossLevel() {
         gameState = Constant.STATE_CROSS;

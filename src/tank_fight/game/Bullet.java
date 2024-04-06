@@ -29,8 +29,7 @@ public class Bullet {
 		this.x = x;
 		this.y = y;
 		this.dir = dir;
-		this.atk = atk;
-		this.color = color;
+        this.color = color;
 	}
 	
 	//给对象池使用的，所有的属性都是默认值
@@ -141,5 +140,17 @@ public class Bullet {
 	
 	public boolean isVisible() {
 		return visible;
+	}
+	@Override
+	public String toString() {
+		return "Bullet{" +
+				"x=" + x +
+				", y=" + y +
+				", speed=" + speed +
+				", dir=" + dir +
+				", atk=" + atk +
+				", color=" + color +
+				", visible=" + visible +
+				'}';
 	}
 }

@@ -10,10 +10,10 @@ import tank_fight.util.MyUtil;
 public class Explode {
     public static final int EXPLODE_FRAME_COUNT = 9;
     //导入资源
-    private static Image[] img;
+    private static final Image[] img;
     //爆炸效果图片的宽度和高度
     private static int explodeWidth;
-    private static int explodeHight;
+    private static int explodeHeight;
 
     static {
         img = new Image[EXPLODE_FRAME_COUNT / 3];
@@ -41,15 +41,15 @@ public class Explode {
 
     public void draw(Graphics g) {
         //对爆炸效果图片的宽高的确定
-        if (explodeHight <= 0) {
+        if (explodeHeight <= 0) {
             explodeWidth = img[0].getWidth(null);
-            explodeHight = img[0].getHeight(null);
+            explodeHeight = img[0].getHeight(null);
         }
         if (!visible) {
             return;
         }
         int explodeX = x - explodeWidth / 2;
-        int explodeY = y - explodeHight / 2;
+        int explodeY = y - explodeHeight / 2;
         g.drawImage(img[index / 3], explodeX, explodeY, null);
         index++;
         //播放完最后一帧，设置为不可见
@@ -88,5 +88,15 @@ public class Explode {
 
     public void setIndex(int index) {
         this.index = index;
+    }
+
+    @Override
+    public String toString() {
+        return "Explode{" +
+                "x=" + x +
+                ", y=" + y +
+                ", index=" + index +
+                ", visible=" + visible +
+                '}';
     }
 }

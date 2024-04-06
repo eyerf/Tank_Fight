@@ -12,7 +12,6 @@ public class LevelInfo {
     private LevelInfo() {
     }
 
-    ;
 
     //定义静态的本类类型的变量，来指向唯一的实例
     private static LevelInfo instance;

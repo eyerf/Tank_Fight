@@ -11,17 +11,15 @@ import java.util.*;
 public class GameInfo {
     //从配置文件中获取
     //关卡数量
-    private static int levelCount;
+    private static final int levelCount;
 
     static {
         Properties prop = new Properties();
         try {
             prop.load(new FileInputStream("level/gameInfo"));
             levelCount = Integer.parseInt(prop.getProperty("levelCount"));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
